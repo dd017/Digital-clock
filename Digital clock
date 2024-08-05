@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Digital Clock</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            flex-direction: column;
+        }
+        
+        .clock-container {
+            text-align: center;
+        }
+        
+        .time {
+            font-size: 5em;
+        }
+        
+        .date {
+            font-size: 2em;
+        }
+
+        .alarm-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .alarm-input {
+            font-size: 1.2em;
+        }
+        
+        .alarm-button {
+            font-size: 1.2em;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+        
+        .alarm-message {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div id="time" class="time"></div>
+        <div id="date" class="date"></div>
+    </div>
+    <div class="alarm-container">
+        <input type="time" id="alarmTime" class="alarm-input">
+        <button onclick="setAlarm()" class="alarm-button">Set Alarm</button>
+    </div>
+    <div id="alarmMessage" class="alarm-message"></div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+        
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            const dayOfWeek = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const dateString = `${dayOfWeek}, ${day} ${month} ${year}`;
+        
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = dateString;
+        }
+
+        let alarmTime = null;
+
+        function setAlarm() {
+            alarmTime = document.getElementById('alarmTime').value;
+            document.getElementById('alarmMessage').textContent = `Alarm set for ${alarmTime}`;
+        }
+
+        function checkAlarm() {
+            const now = new Date();
+            const currentTime = now.toTimeString().slice(0, 5);
+            if (alarmTime && currentTime === alarmTime) {
+                alert('Alarm ringing!');
+                document.getElementById('alarmMessage').textContent = '';
+                alarmTime = null;
+            }
+        }
+
+        setInterval(() => {
+            updateClock();
+            checkAlarm();
+        }, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
